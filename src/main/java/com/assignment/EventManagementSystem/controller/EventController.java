@@ -6,6 +6,7 @@ import com.assignment.EventManagementSystem.entity.Event;
 import com.assignment.EventManagementSystem.repository.EventRepo;
 import com.assignment.EventManagementSystem.repository.UserRepo;
 import com.assignment.EventManagementSystem.service.EventService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ public class EventController {
     private EventService eventService;
 
     @PostMapping
-    public ResponseEntity<?> createEvent(@RequestBody EventDTO eventDTO) {
+    public ResponseEntity<?> createEvent(@Valid @RequestBody EventDTO eventDTO) {
         return eventService.createEvent(eventDTO);
     }
 
     @PutMapping("/{id}")//eventId
-    public ResponseEntity<?> updateEvent(@RequestBody EventDTO eventDTO, @PathVariable("id") UUID uuid) {
+    public ResponseEntity<?> updateEvent(@Valid@RequestBody EventDTO eventDTO, @PathVariable("id") UUID uuid) {
         return eventService.updateEvent(eventDTO, uuid);
     }
 
@@ -52,12 +53,12 @@ public class EventController {
     }
 
     @GetMapping("/{id}/events")//userId or hostUserId
-    public ResponseEntity<?> getEventsHostOrAttend(@PathVariable UUID uuid) {
+    public ResponseEntity<?> getEventsHostOrAttend(@PathVariable("id") UUID uuid) {
         return eventService.getEventsHostOrAttend(uuid);
     }
 
     @GetMapping("/{id}")//eventId
-    public ResponseEntity<?> getEventDetails(@PathVariable UUID uuid) {
+    public ResponseEntity<?> getEventDetails(@PathVariable("id") UUID uuid) {
         return eventService.getEventDetails(uuid);
     }
 }

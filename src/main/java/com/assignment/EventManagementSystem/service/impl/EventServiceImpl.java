@@ -7,14 +7,13 @@ import com.assignment.EventManagementSystem.repository.EventRepo;
 import com.assignment.EventManagementSystem.repository.UserRepo;
 import com.assignment.EventManagementSystem.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -133,14 +132,43 @@ public class EventServiceImpl implements EventService {
         ResponseDTO responseDTO = new ResponseDTO();
         HttpStatus httpStatus;
         try {
+            Optional<List<Event>> eventByCreatedAt;
+            switch (filterBy) {
+                case "date":
+                    eventByCreatedAt = eventRepo.findEventByCreatedAt(LocalDateTime.parse(filterValue));
+                    break;
+                case "location":
+                    eventByCreatedAt = eventRepo.findEventByLocation(filterValue);
+                    break;
+                case "visibility":
+                    eventByCreatedAt = eventRepo.findEventByVisibility(filterValue);
+                    break;
+                default:
+                    eventByCreatedAt = eventRepo.findEventByLocation(filterValue);
+
+
+            }
+            if (eventByCreatedAt.isPresent()) {
+                responseDTO.setStatusCode(HttpStatus.OK);
+                responseDTO.setMessage("Fetch Events successfully");
+                responseDTO.setData(eventByCreatedAt.get());
+                httpStatus = HttpStatus.OK;
+            } else {
+                responseDTO.setStatusCode(HttpStatus.NOT_FOUND);
+                responseDTO.setMessage("Fetch Events failed");
+                responseDTO.setData(null);
+                httpStatus = HttpStatus.NOT_FOUND;
+            }
+
 
         } catch (Exception e) {
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST);
             responseDTO.setMessage("Event creation failed");
-//            responseDTO.setData(eventDTO);
+            responseDTO.setData(null);
             httpStatus = HttpStatus.BAD_REQUEST;
         }
-        return null;
+        return new ResponseEntity<>(responseDTO, httpStatus);
+
     }
 
     @Override
@@ -166,14 +194,28 @@ public class EventServiceImpl implements EventService {
         ResponseDTO responseDTO = new ResponseDTO();
         HttpStatus httpStatus;
         try {
+            List<Map<String, Objects>> eventStatus = eventRepo.findEventStatus(uuid);
+            if (!eventStatus.isEmpty()) {
+                responseDTO.setStatusCode(HttpStatus.OK);
+                responseDTO.setMessage("check status of Event successfully");
+                responseDTO.setData(eventStatus);
+                httpStatus = HttpStatus.OK;
+            } else {
+                responseDTO.setStatusCode(HttpStatus.NOT_FOUND);
+                responseDTO.setMessage("check status of Event failed");
+                responseDTO.setData(null);
+                httpStatus = HttpStatus.NOT_FOUND;
+            }
+
 
         } catch (Exception e) {
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST);
-            responseDTO.setMessage("Event creation failed");
-//            responseDTO.setData(eventDTO);
+            responseDTO.setMessage("check status of Event failed");
+            responseDTO.setData(null);
             httpStatus = HttpStatus.BAD_REQUEST;
         }
-        return null;
+        return new ResponseEntity<>(responseDTO, httpStatus);
+
     }
 
     @Override
@@ -181,14 +223,28 @@ public class EventServiceImpl implements EventService {
         ResponseDTO responseDTO = new ResponseDTO();
         HttpStatus httpStatus;
         try {
+            List<Map<String, Objects>> eventDetails = eventRepo.findEventDetails(uuid);
+
+            if (!eventDetails.isEmpty()) {
+                responseDTO.setStatusCode(HttpStatus.OK);
+                responseDTO.setMessage("Fetch Events successfully");
+                responseDTO.setData(eventDetails);
+                httpStatus = HttpStatus.OK;
+            } else {
+                responseDTO.setStatusCode(HttpStatus.NOT_FOUND);
+                responseDTO.setMessage("Fetch Events failed");
+                responseDTO.setData(null);
+                httpStatus = HttpStatus.NOT_FOUND;
+            }
 
         } catch (Exception e) {
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST);
             responseDTO.setMessage("Event creation failed");
-//            responseDTO.setData(eventDTO);
+            responseDTO.setData(null);
             httpStatus = HttpStatus.BAD_REQUEST;
         }
-        return null;
+        return new ResponseEntity<>(responseDTO, httpStatus);
+
     }
 
     @Override
@@ -197,13 +253,19 @@ public class EventServiceImpl implements EventService {
         HttpStatus httpStatus;
         try {
 
+            List<Map<String, Objects>> eventDetailsAttendeeCount = eventRepo.findEventDetailsAttendeeCount(uuid);
+            responseDTO.setStatusCode(HttpStatus.OK);
+            responseDTO.setMessage("Fetch Events successfully");
+            responseDTO.setData(eventDetailsAttendeeCount);
+            httpStatus = HttpStatus.OK;
         } catch (Exception e) {
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST);
             responseDTO.setMessage("Event creation failed");
-//            responseDTO.setData(eventDTO);
+            responseDTO.setData(null);
             httpStatus = HttpStatus.BAD_REQUEST;
         }
-        return null;
+        return new ResponseEntity<>(responseDTO, httpStatus);
+
     }
 
 

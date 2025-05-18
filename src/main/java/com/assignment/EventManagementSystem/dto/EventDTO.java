@@ -2,6 +2,7 @@ package com.assignment.EventManagementSystem.dto;
 
 import com.assignment.EventManagementSystem.entity.Attendance;
 import com.assignment.EventManagementSystem.entity.Visibility;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class EventDTO {
     private Visibility visibility;
     private String location;
     private String description;
+    @NotBlank(message = "title is required")
     private String title;
 
 }
