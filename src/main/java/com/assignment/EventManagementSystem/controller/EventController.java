@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -27,7 +28,8 @@ public class EventController {
     }
 
     @PutMapping("/{id}")//eventId
-    public ResponseEntity<?> updateEvent(@Valid@RequestBody EventDTO eventDTO, @PathVariable("id") UUID uuid) {
+    @PreAuthorize("@eventSecurity.isHostOrAdmin(#uuid, authentication)")
+    public ResponseEntity<?> updateEvent(@Valid @RequestBody EventDTO eventDTO, @PathVariable("id") UUID uuid) {
         return eventService.updateEvent(eventDTO, uuid);
     }
 
