@@ -14,7 +14,7 @@ A scalable backend application for managing events, built using **Spring Boot** 
 
 ## Technologies Used
 
-- **Java 21**
+- **Java 17**
 - **Spring Boot 3.4.5**
 - **PostgreSQL**
 - **JWT (JSON Web Tokens)** for authentication.
