@@ -24,7 +24,7 @@ A scalable backend application for managing events, built using **Spring Boot** 
 
 ## Prerequisites
 
-- Java 21 or higher
+- Java 17 or higher
 - Maven 3.9.9 or higher
 - PostgreSQL database
 
