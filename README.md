@@ -59,10 +59,67 @@ The application will start on http://localhost:8080.
 API Endpoints
 Authentication
 POST /auth/login - Authenticate a user and retrieve a JWT.
+{
+    "username": "test_new_user_4",
+    "password": "111"
+}
+
 POST /auth/register - Register a new user.
+{
+    "username": "test_new_user",
+    "password": "111",
+    "role": "USER",
+    "email": "abc@gmail.com"
+}
+
 Events
 POST /api/v1/events - Create a new event (requires authentication).
+{
+    "title": "test_event_14",
+    "description": "event14 description",
+    "location": "House",
+    "visibility": "PRIVATE",
+    "startTime": "2025-05-17T10:30:00",
+    "endTime": "2025-05-17T12:30:00",
+    "hostId": "f7303a5e-1e07-437e-b34a-7844abbf5dfa",
+    "attendances": [] 
+
+}
+
+PUT /api/v1/events/<eventId> - Update Events
+{
+    "title": "test_event_9",
+    "description": "event9 description updated 3.04",
+    "location": "House",
+    "visibility": "PRIVATE",
+    "startTime": "2025-05-17T10:30:00",
+    "endTime": "2025-05-17T12:30:00",
+    "hostId": "f7303a5e-1e07-437e-b34a-7844abbf5dfa",
+    "attendances": [] 
+}
+
+DELETE /api/v1/events/<eventId>
+
+POST /api/v1/attendance - Create Attendance
+{
+    "userId": "e07160a2-46f0-48f6-8a4c-1706479e700e",
+    "eventId": "e04c88a9-3466-4321-b3eb-af2f84427800",
+    "status": "MAYBE",
+    "respondedAt": "2025-05-17T11:30:00" 
+}
+
+GET /api/v1/events/upcoming?page=0&size=4  - List upcoming events (paginated)
+
 GET /api/v1/events - Retrieve all events (requires authentication).
+
+GET /api/v1/events/<event_id>/status - Status check of an event
+
+GET /api/v1/events/<user_id>/events - List all events a user is hosting or attending
+
+GET /api/v1/events/location/Office - List events with filtering by date, location, visibility
+
+GET /api/v1/events/<event_id> - Get event details with attendee count
+
 Testing
 Run the tests using:
 mvn test
