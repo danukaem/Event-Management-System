@@ -3,6 +3,7 @@ package com.assignment.EventManagementSystem.service.impl;
 import com.assignment.EventManagementSystem.dto.EventDTO;
 import com.assignment.EventManagementSystem.dto.ResponseDTO;
 import com.assignment.EventManagementSystem.entity.Event;
+import com.assignment.EventManagementSystem.mapper.EventMapper;
 import com.assignment.EventManagementSystem.repository.EventRepo;
 import com.assignment.EventManagementSystem.repository.UserRepo;
 import com.assignment.EventManagementSystem.service.EventService;
@@ -29,17 +30,7 @@ public class EventServiceImpl implements EventService {
         HttpStatus httpStatus;
 
         try {
-            Event event = new Event();
-            event.setAttendances(eventDTO.getAttendances());
-            event.setTitle(eventDTO.getTitle());
-            event.setDescription(eventDTO.getDescription());
-            event.setLocation(eventDTO.getLocation());
-            event.setVisibility(eventDTO.getVisibility());
-            event.setStartTime(eventDTO.getStartTime());
-            event.setEndTime(eventDTO.getEndTime());
-            if (userRepo.findById(eventDTO.getHostId()).isPresent()) {
-                event.setHost(userRepo.findById(eventDTO.getHostId()).get());
-            }
+            Event event = EventMapper.toEntity(eventDTO);
             Event savedEvent = eventRepo.save(event);
             eventDTO.setAttendances(savedEvent.getAttendances());
             eventDTO.setEventId(savedEvent.getId());
