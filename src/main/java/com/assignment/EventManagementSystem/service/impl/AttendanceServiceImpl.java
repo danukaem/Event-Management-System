@@ -3,6 +3,7 @@ package com.assignment.EventManagementSystem.service.impl;
 import com.assignment.EventManagementSystem.dto.AttendanceDTO;
 import com.assignment.EventManagementSystem.dto.ResponseDTO;
 import com.assignment.EventManagementSystem.entity.Attendance;
+import com.assignment.EventManagementSystem.mapper.AttendanceMapper;
 import com.assignment.EventManagementSystem.repository.AttendanceRepo;
 import com.assignment.EventManagementSystem.repository.EventRepo;
 import com.assignment.EventManagementSystem.repository.UserRepo;
@@ -25,21 +26,18 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public ResponseEntity<?> createAttendance(AttendanceDTO attendanceDTO) {
+
         ResponseDTO responseDTO = new ResponseDTO();
         HttpStatus httpStatus;
         try {
-            Attendance attendance = new Attendance();
-            attendance.setUser(userRepo.findById(attendanceDTO.getUserId()).get());
-            attendance.setEvent(eventRepo.findById(attendanceDTO.getEventId()).get());
-            attendance.setStatus(attendanceDTO.getStatus());
-            attendance.setRespondedAt(attendanceDTO.getRespondedAt());
-            attendanceRepo.save(attendance);
+            Attendance entity = AttendanceMapper.toEntity(attendanceDTO);
+            attendanceRepo.save(entity);
             responseDTO.setStatusCode(HttpStatus.OK);
             responseDTO.setMessage("Attendance created successfully");
             responseDTO.setData(attendanceDTO);
 
             httpStatus = HttpStatus.OK;
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST);
             responseDTO.setMessage("Event creation failed");
             responseDTO.setData(attendanceDTO);
